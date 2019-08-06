@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:snacks_app/src/blocs/loginBloc.dart';
 
 class SplashScreen extends StatelessWidget {
   final Color gradientStart =
