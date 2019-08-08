@@ -5,6 +5,8 @@ import 'package:snacks_app/src/blocs/validators/validators.dart';
 import 'package:snacks_app/src/repository/api.dart';
 import 'package:snacks_app/src/routes/routes.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
+import 'package:snacks_app/src/sessionManager/sessionManager.dart';
+import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 class LoginBloc extends BlocBase with Validators {
   //-------------------BehaviorSubjects-----------------------------------------
@@ -45,19 +47,22 @@ class LoginBloc extends BlocBase with Validators {
     api.getLoginData(emailAddress, password).then((onValue) async {
       if (onValue.login[0].email != null) {
         print("Response from server: $onValue");
-        routes.goToHomePage(context);
+        sessionManager.createSession(onValue.login[0]).whenComplete(() {
+          print("I am here");
+          routes.goToHomePage(context);
+        });
       } else {
         print("Post not executed");
       }
     });
-
   }
 
   void checkLoginStatus(BuildContext context) async {
-//    var isLoggedIn = await sessionManager.isLoggedIn;
-//    if (isLoggedIn) {
-//      routes.gotoHomePage(context);
-//    } else {
-//      routes.gotoLoginPage(context);
+    var isLoggedIn = await sessionManager.isLoggedIn;
+    if (isLoggedIn) {
+      routes.goToHomePage(context);
+    } else {
+      routes.goToLoginPage(context);
     }
+  }
 }

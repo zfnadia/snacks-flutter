@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       bloc: LoginBloc(),
       child: MaterialApp(
-        home: LoginScreen(),
+        home: SplashScreen(),
       ),
     );
   }

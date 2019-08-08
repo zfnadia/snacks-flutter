@@ -8,17 +8,18 @@ class SessionManager {
       setIsLoggedIn(true),
     ]);
   }
-}
 
-Future setIsLoggedIn(bool value) =>
-    PreferenceHelper.setBool("isloggedin", value);
+  Future<bool> get isLoggedIn =>
+      PreferenceHelper.getBool("isloggedin");
 
-Future<bool> get isLoggedIn => PreferenceHelper.getBool("isloggedin");
+  Future setIsLoggedIn(bool value) =>
+      PreferenceHelper.setBool("isloggedin", value);
 
-Future<void> clearSession() async {
-  await Future.wait(<Future>[
-    setIsLoggedIn(false),
-  ]);
+  Future<void> clearSession() async {
+    await Future.wait(<Future>[
+      setIsLoggedIn(false),
+    ]);
+  }
 }
 
 final sessionManager = SessionManager();

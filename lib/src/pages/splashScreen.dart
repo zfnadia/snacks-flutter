@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snacks_app/src/blocs/loginBloc.dart';
+import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
 
 class SplashScreen extends StatelessWidget {
   final Color gradientStart =
       Colors.deepPurple[700]; //Change start gradient color here
-  final Color gradientEnd = Colors.purple[500]; //Change end gradient color here
+  final Color gradientEnd = Colors.purple[500];
+  LoginBloc _loginBloc;
 
   @override
   Widget build(BuildContext context) {
+    _loginBloc = BlocProvider.of(context);
+    _loginBloc.checkLoginStatus(context);
     return Scaffold(
         body: Center(
             child: Container(

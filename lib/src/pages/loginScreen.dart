@@ -16,10 +16,10 @@ class LoginScreen extends StatelessWidget {
       //gradient background
       decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.blue, Colors.red],
-          )),
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [Colors.blue, Colors.red],
+      )),
       //main body starts here
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
               Container(
                 width: double.infinity,
                 margin:
-                const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                    const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
                 alignment: Alignment.center,
                 child: Row(
                   children: <Widget>[
@@ -247,8 +247,8 @@ class LoginScreen extends StatelessWidget {
 //                        color: this.highlightColor,
                   onPressed: snapshot.hasData
                       ? () {
-                    _loginBloc.submitLoginData(context);
-                  }
+                          _loginBloc.submitLoginData(context);
+                        }
                       : null,
                   child: Text(
                     "Log In",
