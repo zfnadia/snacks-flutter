@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:snacks_app/src/repository/modelClasses/menuModel.dart';
+
 class Validators {
   final validateEmailAddress =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
@@ -20,6 +22,16 @@ class Validators {
       sink.addError(
           "Password can not be less than 4 charecter or more than 8 charecter");
 //      sink.add("Email is not valid");
+    }
+  });
+
+  final validateMenu =
+  StreamTransformer<MenuModel, MenuModel>.fromHandlers(handleData: (menu, sink) {
+    if (menu != null) {
+      sink.add(menu);
+    } else {
+      sink.addError('Menu not found');
+//      print("Menu not found");
     }
   });
 

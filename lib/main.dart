@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snacks_app/src/pages/loginScreenTwo.dart';
-import 'package:snacks_app/src/pages/loginScreen.dart';
+import 'package:snacks_app/src/blocs/bottomNavigationBloc.dart';
 import 'package:snacks_app/src/pages/splashScreen.dart';
 import 'package:snacks_app/src/blocs/loginBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
@@ -13,10 +12,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       bloc: LoginBloc(),
-      child: MaterialApp(
-        home: SplashScreen(),
+      child: BlocProvider(
+        bloc: BottomNavigationBloc(),
+        child: MaterialApp(
+          home: SplashScreen(),
+        ),
       ),
     );
   }
 }
-
