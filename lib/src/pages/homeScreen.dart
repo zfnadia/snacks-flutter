@@ -16,7 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
+  int _currentPage = 0;
+  BottomNavigationBloc bottomNavigationBloc;
+
   final List<Widget> _widgetOptions = [
     MenuScreen(),
     MyOrder(),
@@ -28,8 +30,6 @@ class HomeScreenState extends State<HomeScreen> {
     "My Order",
     "Order for a Colleague!"
   ];
-
-  BottomNavigationBloc bottomNavigationBloc;
 
   @override
   void didChangeDependencies() {
@@ -58,20 +58,11 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   Widget bottomBar() {
     return StreamBuilder(
         stream: bottomNavigationBloc.pageIndex,
         initialData: 0,
         builder: (context, snapshot) {
-          int _currentIndex =
-          snapshot.hasData && snapshot.data is int ? snapshot.data : 0;
-
           return StreamBuilder(
             stream: bottomNavigationBloc.pageNames,
             initialData: _pageNames,
@@ -80,46 +71,48 @@ class HomeScreenState extends State<HomeScreen> {
                 appBar: AppBar(
                   backgroundColor: Colors.deepPurple,
                   title: Text(
-                    snapshot.hasData && snapshot.data is List<Widget>
-                        ? snapshot.data[_currentIndex]
-                        : _pageNames[_currentIndex],
+                    _pageNames[_currentPage],
                   ),
                 ),
-//                bottomNavigationBar: FancyBottomNavigation(
-//                  circleColor: Colors.deepPurple,
-//                  activeIconColor: Colors.white,
-//                  tabs: [
-//                    TabData(iconData: Icons.fastfood, title: "Menu"),
-//                    TabData(iconData: Icons.favorite, title: "My Order"),
-//                    TabData(iconData: Icons.supervisor_account, title:"Colleague's Order"),
-//                  ],
-////                  onTabChangedListener: (position) {
-////                    setState(() {
-////                      _currentIndex = position;
-////                    });
-////                  },
-//                ),
-                bottomNavigationBar: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  onTap: bottomNavigationBloc.changedPageIndex,
-                  currentIndex: _currentIndex,
-                  fixedColor: Colors.deepPurple,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.fastfood),
-                      title: Text("Menu"),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.favorite),
-                      title: Text("My Order"),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.supervisor_account),
-                      title: Text("Colleague's Order"),
-                    ),
+                bottomNavigationBar: FancyBottomNavigation(
+                  circleColor: Colors.deepPurple,
+                  activeIconColor: Colors.white,
+                  inactiveIconColor: Colors.deepPurple,
+                  tabs: [
+                    TabData(iconData: Icons.fastfood, title: "Menu"),
+                    TabData(iconData: Icons.favorite, title: "My Order"),
+                    TabData(
+                        iconData: Icons.supervisor_account,
+                        title: "Colleague's Order"),
                   ],
+                  onTabChangedListener: (position) {
+                    setState(() {
+                      _currentPage = position;
+                    });
+                  },
                 ),
-                body: _widgetOptions[_currentIndex],
+//................General bottom navigation bar..............//
+//                bottomNavigationBar: BottomNavigationBar(
+//                  type: BottomNavigationBarType.fixed,
+//                  onTap: bottomNavigationBloc.changedPageIndex,
+//                  currentIndex: _currentIndex,
+//                  fixedColor: Colors.deepPurple,
+//                  items: <BottomNavigationBarItem>[
+//                    BottomNavigationBarItem(
+//                      icon: Icon(Icons.fastfood),
+//                      title: Text("Menu"),
+//                    ),
+//                    BottomNavigationBarItem(
+//                      icon: Icon(Icons.favorite),
+//                      title: Text("My Order"),
+//                    ),
+//                    BottomNavigationBarItem(
+//                      icon: Icon(Icons.supervisor_account),
+//                      title: Text("Colleague's Order"),
+//                    ),
+//                  ],
+//                ),
+                body: _widgetOptions[_currentPage],
               );
             },
           );
