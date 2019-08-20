@@ -4,6 +4,7 @@ class NetworkConfiguration {
   static const String BASE_URL = "http://172.16.9.235";
   static const String LOGIN_URL = "/snacks/SnacksLogin.asp";
   static const String MENU_URL = "/snacks/getmenu.asp";
+  static const String ORDER_URL = "/snacks/ordersnacks.asp";
   //
 
   //--------------------------------------------------------------------------//

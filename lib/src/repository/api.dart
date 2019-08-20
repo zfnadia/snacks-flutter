@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 
 import 'configuration.dart';
 import 'modelClasses/menuModel.dart';
+import 'modelClasses/orderModel.dart';
 
 class ApiProvider {
   final _dio = Dio(NetworkConfiguration.baseOptions);
@@ -30,6 +31,14 @@ class ApiProvider {
         options: Options(method: "GET"));
     print("${response.data} FURRRRRRR");
     return MenuModel.fromJson(response.data);
+  }
+
+  Future<OrderModel> sendOrder(String userId, String userName, String order, String clgOrder) async {
+    var response = await _dio.request(NetworkConfiguration.ORDER_URL,
+    options: Options(method: "GET"),
+    data: {"userid": userId, "uname": userName, "menu": order, "corder": clgOrder});
+    print("MESSAGE TYPE $response");
+    return OrderModel.fromJson(response.data);
   }
 }
 

@@ -24,23 +24,4 @@ class Validators {
 //      sink.add("Email is not valid");
     }
   });
-
-  final validateMenu =
-  StreamTransformer<MenuModel, MenuModel>.fromHandlers(handleData: (menu, sink) {
-    if (menu != null) {
-      sink.add(menu);
-    } else {
-      sink.addError('Menu not found');
-//      print("Menu not found");
-    }
-  });
-
-//  final validateUserName = StreamTransformer<String, String>.fromHandlers(
-//      handleData: (userName, sink) {
-//    if (userName.length > 3) {
-//      sink.add(userName);
-//    } else {
-//      sink.addError("Username can not be less than 4 characters");
-//    }
-//  });
 }

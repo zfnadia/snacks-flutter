@@ -1,33 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
-import 'package:snacks_app/src/repository/api.dart';
+
+final foodImage =
+    'https://upload.wikimedia.org/wikipedia/commons/a/aa/RM-050_Food_sign.png';
+final cookies = "";
+final chanachur = "";
+final chips = "";
+final double circleRadius = 70.0;
+final double circleBorderWidth = 5.0;
 
 class MenuScreen extends StatelessWidget {
+  BuildContext context;
   MenuBloc _menuBloc;
-  final double circleRadius = 100.0;
-  final double circleBorderWidth = 8.0;
 
   @override
   Widget build(BuildContext context) {
     _menuBloc = BlocProvider.of(context);
     _menuBloc.showMenu();
-    //
-//    var response = api.getMenu().toString();
-//    print(response + "ERRRRRRRR");
+
     return Scaffold(
       body: Container(
         child: Center(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 "Today's Menu",
                 style: TextStyle(fontSize: 30),
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
-              mainMenu(),
+              StreamBuilder(
+                stream: _menuBloc.mainMenu,
+                builder: (context, snapshot) {
+                  return menuItem(snapshot, foodImage);
+                },
+              ),
+//              mainMenuItem(),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Alternate Menu",
+                style: TextStyle(fontSize: 30),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: Container(
+//                  color: Colors.deepOrange,
+                  child: Column(
+                    children: <Widget>[
+                      StreamBuilder(
+                        stream: _menuBloc.altMenuOne,
+                        builder: (context, snapshot) {
+                          return menuItem(snapshot, cookies);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      StreamBuilder(
+                        stream: _menuBloc.altMenuTwo,
+                        builder: (context, snapshot) {
+                          return menuItem(snapshot, chanachur);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      StreamBuilder(
+                        stream: _menuBloc.altMenuThree,
+                        builder: (context, snapshot) {
+                          return menuItem(snapshot, chips);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -35,27 +91,11 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget mainMenu() {
-//    return StreamBuilder(
-//      stream: _menuBloc.menu,
-//      builder: (context, snapshot) {
-//        var name = "Main menu: ";
-//        if (snapshot.hasData) {
-//          name = name + snapshot.data.mainMenu + "\n \n Alternate Menu: " + snapshot.data.alternateMenu;
-//          print("habijabi $name");
-//        } else {
-//          name = name + "STUCK IN PARADISE";
-//        }
-//        return Text(
-//          name,
-//          style: TextStyle(fontSize: 20),
-//        );
-//      },
-//    );
+  Widget menuItem(snapshot, foodImage) {
     return Container(
-      height: 150.0,
+      height: 100.0,
       width: double.infinity,
-      color: Colors.greenAccent,
+      //color: Colors.greenAccent,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Stack(
@@ -63,18 +103,17 @@ class MenuScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 40.0),
               child: Card(
-                elevation: 4.0,
-                //replace this Container with your Card
-                color: Colors.blue,
-                child: Center(
-                    child: Text(
-                  "HELLO",
-                  style: TextStyle(color: Colors.white),
-                )),
-              ),
+                  elevation: 4.0,
+                  //replace this Container with your Card
+                  color: Colors.blueAccent,
+                  child: Center(
+                    child: Text(snapshot.data.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+//                  },
+                  )),
             ),
-            Positioned (
-              top: 15,
+            Positioned(
+              top: 5,
               child: Container(
                 width: circleRadius,
                 height: circleRadius,
@@ -88,17 +127,15 @@ class MenuScreen extends StatelessWidget {
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              'https://upload.wikimedia.org/wikipedia/commons/a/a0/Bill_Gates_2018.jpg',
+                              foodImage,
                             ))),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-//margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),

@@ -22,5 +22,15 @@ class PreferenceHelper {
     return p.setString(key, value);
   }
 
+  static Future<int> getInt(String key) async {
+    final p = await prefs;
+    return p.getInt(key) ?? 0;
+  }
+
+  static Future setInt(String key, int value) async {
+    final p = await prefs;
+    return p.setInt(key, value);
+  }
+
   static Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 }
