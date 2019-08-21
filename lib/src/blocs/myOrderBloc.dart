@@ -25,4 +25,10 @@ class MyOrderBloc extends BlocBase {
     print("HEYYYYYYYYYYYYYYYYYYY $messageType");
 
   }
+
+  Future<String> viewPresentOrder() async {
+    var userID = await sessionManager.userID;
+    OrderModel orderModel = await api.getPresentOrder(userID);
+    return orderModel.messageType.toString();
+  }
 }

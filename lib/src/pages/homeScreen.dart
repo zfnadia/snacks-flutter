@@ -22,7 +22,7 @@ class HomeScreenState extends State<HomeScreen> {
   final List<Widget> _widgetOptions = [
     MenuScreen(),
     MyOrder(),
-    ColleagueOrder(),
+    ColleagueOrderScreen(),
   ];
 
   final List<String> _pageNames = [

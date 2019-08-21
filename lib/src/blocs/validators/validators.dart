@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:snacks_app/src/repository/modelClasses/menuModel.dart';
+import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 
 class Validators {
   final validateEmailAddress =
@@ -22,6 +22,16 @@ class Validators {
       sink.addError(
           "Password can not be less than 4 charecter or more than 8 charecter");
 //      sink.add("Email is not valid");
+    }
+  });
+
+  final validateUsers =
+      StreamTransformer<UserListModel, UserListModel>.fromHandlers(
+          handleData: (userList, sink) {
+    if (userList != null) {
+      sink.add(userList);
+    } else {
+      sink.addError("User list not found");
     }
   });
 }

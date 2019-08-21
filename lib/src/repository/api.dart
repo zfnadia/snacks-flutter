@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'configuration.dart';
 import 'modelClasses/menuModel.dart';
 import 'modelClasses/orderModel.dart';
+import 'modelClasses/userListModel.dart';
 
 class ApiProvider {
   final _dio = Dio(NetworkConfiguration.baseOptions);
@@ -33,13 +34,37 @@ class ApiProvider {
     return MenuModel.fromJson(response.data);
   }
 
-  Future<OrderModel> sendOrder(String userId, String userName, String order, String clgOrder) async {
+  Future<OrderModel> sendOrder(
+      String userId, String userName, String order, String clgOrder) async {
     var response = await _dio.request(NetworkConfiguration.ORDER_URL,
-    options: Options(method: "GET"),
-    data: {"userid": userId, "uname": userName, "menu": order, "corder": clgOrder});
+        options: Options(method: "GET"),
+        data: {
+          "userid": userId,
+          "uname": userName,
+          "menu": order,
+          "corder": clgOrder
+        });
     print("MESSAGE TYPE $response");
+    return OrderModel.fromJson(response.data);
+  }
+
+  Future<UserListModel> getUserList() async {
+    var response = await _dio.request(NetworkConfiguration.USER_LIST_URL,
+        options: Options(method: "GET"));
+    print(response.data);
+    return UserListModel.fromJson(response.data);
+  }
+
+  Future<OrderModel> getPresentOrder(String userId) async {
+    var response = await _dio.request(NetworkConfiguration.VIEW_TODAY_ORDER_URL,
+    options: Options(method: "GET"),
+    data: {
+      "userid": userId,
+    });
     return OrderModel.fromJson(response.data);
   }
 }
 
 final api = ApiProvider();
+
+

@@ -5,7 +5,8 @@ class NetworkConfiguration {
   static const String LOGIN_URL = "/snacks/SnacksLogin.asp";
   static const String MENU_URL = "/snacks/getmenu.asp";
   static const String ORDER_URL = "/snacks/ordersnacks.asp";
-  //
+  static const String USER_LIST_URL = "/snacks/getuserlist.asp";
+  static const String VIEW_TODAY_ORDER_URL = "/snacks/viewtodayorder.asp";
 
   //--------------------------------------------------------------------------//
 
