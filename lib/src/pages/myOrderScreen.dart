@@ -12,35 +12,37 @@ class MyOrder extends StatelessWidget {
     _myOrderBloc = BlocProvider.of(context);
     _menuBloc = BlocProvider.of(context);
     _menuBloc.showMenu();
-//    if (_myOrderBloc.viewPresentOrder() == "1") {
-      return Scaffold(
-          body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              'Select Menu',
-              style: TextStyle(fontSize: 30),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            radioButtons(),
-            SizedBox(
-              height: 20.0,
-            ),
-            StreamBuilder(
-                stream: _myOrderBloc.radioBtnOrderValue,
-                builder: (context, snapshot) {
-                  return Container(
-                    width: 250,
-                    child: RaisedButton(
-                        onPressed: snapshot.hasData
-                            ? () {
+    return Scaffold(
+        body: Container(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            'Select Menu',
+            style: TextStyle(fontSize: 30),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          radioButtons(),
+          SizedBox(
+            height: 20.0,
+          ),
+          StreamBuilder(
+              stream: _myOrderBloc.radioBtnOrderValue,
+              builder: (context, snapshot) {
+                return Container(
+                  width: 250,
+                  child: RaisedButton(
+                      onPressed: snapshot.hasData
+                          ? () {
+                              var presentOrderMsgType =
+                                  _myOrderBloc.viewPresentOrder().toString();
+                              if (presentOrderMsgType == "1") {
                                 showDialog<void>(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -60,52 +62,60 @@ class MyOrder extends StatelessWidget {
                                     );
                                   },
                                 );
+                              } else {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        'Please Note',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: const Text(
+                                          'You have already placed the order for today!'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               }
-                            : null,
-                        textColor: Colors.white,
-                        color: Colors.deepPurpleAccent,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 40),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.donut_large),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Submit Order",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        )),
-                  );
-                }),
-          ],
-        ),
-      ));
-//    } else {
-//          return AlertDialog(
-//            title: Text('Please Note'),
-//            content: const Text(
-//                'You have already placed your order for today!'),
-//            actions: <Widget>[
-//              FlatButton(
-//                child: Text('OK'),
-//                onPressed: () {
-//                  Navigator.of(context).pop();
-//
-//                },
-//              ),
-//            ],
-//          );
-//    }
+                            }
+                          : null,
+                      textColor: Colors.white,
+                      color: Colors.deepPurpleAccent,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 40),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.donut_large),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Submit Order",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      )),
+                );
+              }),
+        ],
+      ),
+    ));
   }
 
   Widget radioButtons() {
     return StreamBuilder(
         stream: _myOrderBloc.radioBtnOrderValue,
         builder: (context, snapshot) {
-          var _radioValue = snapshot.data;
+          var _radioValue =
+              snapshot.hasData && snapshot.data is String ? snapshot.data : "";
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -127,7 +137,9 @@ class MyOrder extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -154,7 +166,9 @@ class MyOrder extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -181,7 +195,9 @@ class MyOrder extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -208,7 +224,9 @@ class MyOrder extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],

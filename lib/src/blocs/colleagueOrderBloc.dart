@@ -16,21 +16,23 @@ class ColleagueOrderBloc extends BlocBase with Validators {
 
   List<User> mUserList = List<User>();
   final _userList = BehaviorSubject<UserListModel>();
-  final _userDropdownValue = BehaviorSubject<String>();
+  final _userDropdownValue = BehaviorSubject<User>();
   final _radioBtnOrderValue = BehaviorSubject<String>();
 
   Stream<UserListModel> get userList =>
       _userList.stream.transform(validateUsers);
-  Stream<String> get userDropdownValue => _userDropdownValue.stream;
+
+  Stream<User> get userDropdownValue => _userDropdownValue.stream;
+
   Stream<String> get radioBtnOrderValue => _radioBtnOrderValue.stream;
 
-
   Function(UserListModel) get sinkUserList => _userList.sink.add;
-  Function(String) get changeUserDropdownValue => _userDropdownValue.sink.add;
+
+  Function(User) get changeUserDropdownValue => _userDropdownValue.sink.add;
+
   Function(String) get changeMyOrder => _radioBtnOrderValue.sink.add;
 
-
-  void showUserList() async{
+  void showUserList() async {
     UserListModel userListModel = await api.getUserList();
     sinkUserList(userListModel);
   }
@@ -39,12 +41,13 @@ class ColleagueOrderBloc extends BlocBase with Validators {
     var userName = await sessionManager.userName;
     var userID = await sessionManager.userID;
 
-//    OrderModel orderModel = await api.sendOrder(userID, userName, _radioBtnOrderValue.value, userID);
-//    var messageType = orderModel.messageType.toString();
-//    print("HEYYYYYYYYYYYYYYYYYYY $messageType");
+    await api.sendOrder(_userDropdownValue.value.gid, userName,
+        _radioBtnOrderValue.value, userID);
+  }
 
+  Future<String> viewPresentOrder() async {
+    OrderModel orderModel =
+        await api.getPresentOrder(_userDropdownValue.value.gid);
+    return orderModel.messageType.toString();
   }
 }
-
-
-

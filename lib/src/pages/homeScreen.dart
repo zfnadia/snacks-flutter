@@ -5,6 +5,7 @@ import 'package:snacks_app/src/blocs/colleagueOrderBloc.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/myOrderBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
+import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 import 'colleagueOrderScreen.dart';
 import 'menuScreen.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   int _currentPage = 0;
   BottomNavigationBloc bottomNavigationBloc;
+  BuildContext _context;
 
   final List<Widget> _widgetOptions = [
     MenuScreen(),
@@ -35,7 +37,6 @@ class HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bottomNavigationBloc = BlocProvider.of(context);
-    bottomNavigationBloc.getPageNames();
   }
 
   @override
@@ -45,6 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     // TODO: implement build
     return BlocProvider(
       bloc: MenuBloc(),
@@ -73,6 +75,45 @@ class HomeScreenState extends State<HomeScreen> {
                   title: Text(
                     _pageNames[_currentPage],
                   ),
+                  actions: <Widget>[
+                    IconButton(
+                        icon: Icon(
+                          Icons.exit_to_app,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showDialog<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Sign Out',
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: const Text(
+                                  'Are you sure to sign out?',
+                                  textAlign: TextAlign.center,
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      sessionManager.signOut(_context);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text('NO'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }),
+                  ],
                 ),
                 bottomNavigationBar: FancyBottomNavigation(
                   circleColor: Colors.deepPurple,

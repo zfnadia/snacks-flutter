@@ -20,10 +20,7 @@ class MyOrderBloc extends BlocBase {
     var userName = await sessionManager.userName;
     var userID = await sessionManager.userID;
 
-    OrderModel orderModel = await api.sendOrder(userID, userName, _radioBtnOrderValue.value, userID);
-    var messageType = orderModel.messageType.toString();
-    print("HEYYYYYYYYYYYYYYYYYYY $messageType");
-
+    await api.sendOrder(userID, userName, _radioBtnOrderValue.value, userID);
   }
 
   Future<String> viewPresentOrder() async {

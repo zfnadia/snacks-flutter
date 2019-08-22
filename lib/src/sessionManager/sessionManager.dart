@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:snacks_app/src/repository/api.dart';
 import 'package:snacks_app/src/repository/modelClasses/loginModel.dart';
+import 'package:snacks_app/src/routes/routes.dart';
 import 'preferencesHelper.dart';
 
 class SessionManager {
@@ -29,6 +31,12 @@ class SessionManager {
   Future<void> clearSession() async {
     await Future.wait(
         <Future>[setIsLoggedIn(false), setUserName(""), setUserID("")]);
+  }
+
+  void signOut(context) {
+    sessionManager.clearSession().whenComplete(() {
+      routes.goToLoginPage(context);
+    });
   }
 }
 

@@ -3,6 +3,7 @@ import 'package:snacks_app/src/blocs/colleagueOrderBloc.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/myOrderBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
+import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 
 class ColleagueOrderScreen extends StatelessWidget {
   MyOrderBloc _myOrderBloc;
@@ -58,25 +59,53 @@ class ColleagueOrderScreen extends StatelessWidget {
                   child: RaisedButton(
                       onPressed: snapshot.hasData
                           ? () {
-                              showDialog<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Order Submitted'),
-                                    content: const Text(
-                                        'Your order has been submitted successfully!'),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          _myOrderBloc.sendOrder();
-                                        },
+                              var presentOrderMsgType = _colleagueOrderBloc
+                                  .viewPresentOrder()
+                                  .toString();
+                              if (presentOrderMsgType == "1") {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Order Submitted'),
+                                      content: const Text(
+                                          'Your order has been submitted successfully!'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            _colleagueOrderBloc
+                                                .sendColleagueOrder();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        'Please Note',
+                                        textAlign: TextAlign.center,
                                       ),
-                                    ],
-                                  );
-                                },
-                              );
+                                      content: const Text(
+                                          'You have already placed the order for today!'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             }
                           : null,
                       textColor: Colors.white,
@@ -106,7 +135,8 @@ class ColleagueOrderScreen extends StatelessWidget {
     return StreamBuilder(
         stream: _myOrderBloc.radioBtnOrderValue,
         builder: (context, snapshot) {
-          var _radioValue = snapshot.data;
+          var _radioValue =
+              snapshot.hasData && snapshot.data is String ? snapshot.data : "";
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -128,7 +158,9 @@ class ColleagueOrderScreen extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -155,7 +187,9 @@ class ColleagueOrderScreen extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -182,7 +216,9 @@ class ColleagueOrderScreen extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -209,7 +245,9 @@ class ColleagueOrderScreen extends StatelessWidget {
                             },
                           ),
                           Text(
-                            snapshot.data,
+                            snapshot.hasData && snapshot.data is String
+                                ? snapshot.data.toString()
+                                : "",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -238,43 +276,38 @@ class ColleagueOrderScreen extends StatelessWidget {
         ),
         child: StreamBuilder(
             stream: _colleagueOrderBloc.userList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data != null) {
-                List<String> userList = List<String>();
-                userList.clear();
-                snapshot.data.users
-                    .forEach((element) => userList.add(element.uname));
-                _colleagueOrderBloc.changeUserDropdownValue(userList[0]);
-                return StreamBuilder(
-                    stream: _colleagueOrderBloc.userDropdownValue,
-                    builder: (context, snapshot) {
-                      return DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: Center(
-                            child: DropdownButton<String>(
-                              hint: Text('Select'),
-                              items: userList.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  child: Text(item),
-                                  value: item,
-                                );
-                              }).toList(),
-                              onChanged:
-                                  _colleagueOrderBloc.changeUserDropdownValue,
-                              value: snapshot.hasData
-                                  ? snapshot.data
-                                  : userList[0],
-                              style: Theme.of(context).textTheme.title,
-                              isExpanded: true,
+            builder: (context, outerSnapshot) {
+              return outerSnapshot.hasData &&
+                      outerSnapshot.data is UserListModel &&
+                      outerSnapshot.data != null
+                  ? StreamBuilder(
+                      stream: _colleagueOrderBloc.userDropdownValue,
+                      builder: (context, innerSnapshot) {
+                        List<User> userList = outerSnapshot.data.users.toList();
+                        _colleagueOrderBloc
+                            .changeUserDropdownValue(userList[0]);
+                        return DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: Center(
+                              child: DropdownButton<User>(
+                                items: userList.map((User item) {
+                                  return DropdownMenuItem<User>(
+                                    child: Text(item.uname),
+                                    value: item,
+                                  );
+                                }).toList(),
+                                onChanged:
+                                    _colleagueOrderBloc.changeUserDropdownValue,
+                                value: innerSnapshot.data,
+                                style: Theme.of(context).textTheme.title,
+                                isExpanded: true,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    });
-              } else {
-                return Text('Loading');
-              }
+                        );
+                      })
+                  : Text('Loading');
             }),
       ),
     );

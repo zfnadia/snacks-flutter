@@ -18,19 +18,4 @@ class BottomNavigationBloc extends BlocBase {
     _pageIndex.close();
     _pageNames.close();
   }
-//
-//  void clearAllData() {
-//    _pageIndex.value = 0;
-//    _pageNames.value = null;
-//  }
-
-  void getPageNames() {
-    final List<String> _pageNames = [
-      "Welcome",
-      "My Order",
-      "Order for a Colleague!",
-    ];
-
-    changedPageName(_pageNames);
-  }
 }

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
 
-final foodImage =
-    'https://upload.wikimedia.org/wikipedia/commons/a/aa/RM-050_Food_sign.png';
-final cookies = "";
-final chanachur = "";
-final chips = "";
+final foodImage = 'assets/spag.png';
+final cookies = "assets/cookie.png";
+final charm = "assets/potatoes.png";
+final chips = "assets/chips.png";
 final double circleRadius = 70.0;
 final double circleBorderWidth = 5.0;
 
@@ -21,6 +20,12 @@ class MenuScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                  "",
+                ),
+                fit: BoxFit.fill)),
         child: Center(
           child: Column(
             children: <Widget>[
@@ -68,7 +73,7 @@ class MenuScreen extends StatelessWidget {
                       StreamBuilder(
                         stream: _menuBloc.altMenuTwo,
                         builder: (context, snapshot) {
-                          return menuItem(snapshot, chanachur);
+                          return menuItem(snapshot, charm);
                         },
                       ),
                       SizedBox(
@@ -105,10 +110,13 @@ class MenuScreen extends StatelessWidget {
               child: Card(
                   elevation: 4.0,
                   //replace this Container with your Card
-                  color: Colors.blueAccent,
+                  color: Colors.white,
                   child: Center(
-                    child: Text(snapshot.data.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    child: Text(
+                        snapshot.hasData && snapshot.data is String
+                            ? snapshot.data.toString()
+                            : "",
+                        style: TextStyle(color: Colors.black, fontSize: 20)),
 //                  },
                   )),
             ),
@@ -125,10 +133,7 @@ class MenuScreen extends StatelessWidget {
                     decoration: ShapeDecoration(
                         shape: CircleBorder(),
                         image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              foodImage,
-                            ))),
+                            fit: BoxFit.cover, image: AssetImage(foodImage))),
                   ),
                 ),
               ),
