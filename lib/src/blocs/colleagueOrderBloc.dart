@@ -7,17 +7,11 @@ import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 class ColleagueOrderBloc extends BlocBase with Validators {
-  @override
-  void dispose() {
-    _userList.close();
-    _userDropdownValue.close();
-    _radioBtnOrderValue.close();
-  }
-
   List<User> mUserList = List<User>();
   final _userList = BehaviorSubject<UserListModel>();
   final _userDropdownValue = BehaviorSubject<User>();
   final _radioBtnOrderValue = BehaviorSubject<String>();
+  var trimmedOrder;
 
   Stream<UserListModel> get userList =>
       _userList.stream.transform(validateUsers);
@@ -37,17 +31,31 @@ class ColleagueOrderBloc extends BlocBase with Validators {
     sinkUserList(userListModel);
   }
 
-  void sendColleagueOrder() async {
-    var userName = await sessionManager.userName;
-    var userID = await sessionManager.userID;
+  /*Had to trim the order selected through Radio Button as Radio widget is 
+   returning value with a leading space when onChanged is being called. BAZINGA */
+  void trimLeadingSpace(String str) {
+    trimmedOrder = str.replaceFirst(new RegExp(r"^\s+"), "");
+  }
 
-    await api.sendOrder(_userDropdownValue.value.gid, userName,
-        _radioBtnOrderValue.value, userID);
+  void sendColleagueOrder() async {
+    var userID = await sessionManager.userID;
+    trimLeadingSpace(_radioBtnOrderValue.value);
+
+    await api.sendOrder(_userDropdownValue.value.gid,
+        _userDropdownValue.value.uname, trimmedOrder, userID);
+    print(_userDropdownValue.value.uname);
   }
 
   Future<String> viewPresentOrder() async {
     OrderModel orderModel =
-        await api.getPresentOrder(_userDropdownValue.value.gid);
-    return orderModel.messageType.toString();
+        await api.getOrderStatus(_userDropdownValue.value.gid);
+    return orderModel.messageType;
+  }
+
+  @override
+  void dispose() {
+    _userList.close();
+    _userDropdownValue.close();
+    _radioBtnOrderValue.close();
   }
 }

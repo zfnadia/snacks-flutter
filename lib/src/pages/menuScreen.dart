@@ -21,11 +21,13 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-                  "",
-                ),
-                fit: BoxFit.fill)),
+          color: Colors.white70,
+        ),
+//            image: DecorationImage(
+//                image: AssetImage(
+//                  "",
+//                ),
+//                fit: BoxFit.fill)),
         child: Center(
           child: Column(
             children: <Widget>[

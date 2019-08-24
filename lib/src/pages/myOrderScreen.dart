@@ -41,47 +41,26 @@ class MyOrder extends StatelessWidget {
                       onPressed: snapshot.hasData
                           ? () {
                               var presentOrderMsgType =
-                                  _myOrderBloc.viewPresentOrder().toString();
-                              if (presentOrderMsgType == "1") {
+                                  _myOrderBloc.viewPresentOrder();
+                              if (presentOrderMsgType.toString() == "0") {
+                                _myOrderBloc.sendOrder();
                                 showDialog<void>(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Order Submitted'),
-                                      content: const Text(
-                                          'Your order has been submitted successfully!'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text('OK'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            _myOrderBloc.sendOrder();
-                                          },
-                                        ),
-                                      ],
-                                    );
+                                    return showAlertDialog(
+                                        context,
+                                        'Order Submitted',
+                                        'Your order has been submitted successfully!');
                                   },
                                 );
                               } else {
                                 showDialog<void>(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
+                                    return showAlertDialog(
+                                        context,
                                         'Please Note',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: const Text(
-                                          'You have already placed the order for today!'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text('OK'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
+                                        'You have already placed the order for today!');
                                   },
                                 );
                               }
@@ -120,119 +99,26 @@ class MyOrder extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               StreamBuilder(
-                stream: _menuBloc.mainMenu,
-                builder: (context, snapshot) {
-                  return Container(
-                    height: 70.0,
-                    width: double.infinity,
-                    child: Card(
-                      elevation: 4.0,
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                            value: snapshot.data,
-                            groupValue: _radioValue,
-                            onChanged: (value) {
-                              _myOrderBloc.changeMyOrder(value);
-                            },
-                          ),
-                          Text(
-                            snapshot.hasData && snapshot.data is String
-                                ? snapshot.data.toString()
-                                : "",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  stream: _menuBloc.mainMenu,
+                  builder: (context, snapshot) {
+                    return radioItem(_myOrderBloc, snapshot, _radioValue);
+                  }),
               StreamBuilder(
                 stream: _menuBloc.altMenuOne,
                 builder: (context, snapshot) {
-                  return Container(
-                    height: 70.0,
-                    width: double.infinity,
-                    child: Card(
-                      elevation: 4.0,
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                            value: snapshot.data,
-                            groupValue: _radioValue,
-                            onChanged: (value) {
-                              _myOrderBloc.changeMyOrder(value);
-                            },
-                          ),
-                          Text(
-                            snapshot.hasData && snapshot.data is String
-                                ? snapshot.data.toString()
-                                : "",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return radioItem(_myOrderBloc, snapshot, _radioValue);
                 },
               ),
               StreamBuilder(
                 stream: _menuBloc.altMenuTwo,
                 builder: (context, snapshot) {
-                  return Container(
-                    height: 70.0,
-                    width: double.infinity,
-                    child: Card(
-                      elevation: 4.0,
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                            value: snapshot.data,
-                            groupValue: _radioValue,
-                            onChanged: (value) {
-                              _myOrderBloc.changeMyOrder(value);
-                            },
-                          ),
-                          Text(
-                            snapshot.hasData && snapshot.data is String
-                                ? snapshot.data.toString()
-                                : "",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return radioItem(_myOrderBloc, snapshot, _radioValue);
                 },
               ),
               StreamBuilder(
                 stream: _menuBloc.altMenuThree,
                 builder: (context, snapshot) {
-                  return Container(
-                    height: 70.0,
-                    width: double.infinity,
-                    child: Card(
-                      elevation: 4.0,
-                      child: Row(
-                        children: <Widget>[
-                          Radio(
-                            value: snapshot.data,
-                            groupValue: _radioValue,
-                            onChanged: (value) {
-                              _myOrderBloc.changeMyOrder(value);
-                            },
-                          ),
-                          Text(
-                            snapshot.hasData && snapshot.data is String
-                                ? snapshot.data.toString()
-                                : "",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return radioItem(_myOrderBloc, snapshot, _radioValue);
                 },
               ),
               SizedBox(
@@ -245,5 +131,47 @@ class MyOrder extends StatelessWidget {
             ],
           );
         });
+  }
+
+  static Widget radioItem(_bloc, snapshot, _radioValue) {
+    return Container(
+      height: 70.0,
+      width: double.infinity,
+      child: Card(
+        elevation: 4.0,
+        child: Row(
+          children: <Widget>[
+            Radio(
+              value: snapshot.data,
+              groupValue: _radioValue,
+              onChanged: (value) {
+                _bloc.changeMyOrder(value);
+              },
+            ),
+            Text(
+              snapshot.hasData && snapshot.data is String
+                  ? snapshot.data.toString()
+                  : "",
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget showAlertDialog(BuildContext context, String title, String content) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
   }
 }

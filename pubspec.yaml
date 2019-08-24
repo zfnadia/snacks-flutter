@@ -52,14 +52,6 @@ flutter:
     - assets/cookie.png
     - assets/spag.png
     - assets/potatoes.png
-    - assets/background_light.png
-    - assets/bg.jpg
-    - assets/bg2.jpg
-    - assets/bg3.jpg
-    - assets/bg4.jpg
-    - assets/bg6.jpg
-
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
