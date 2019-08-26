@@ -4,6 +4,7 @@ import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
 import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 import 'package:snacks_app/src/pages/myOrderScreen.dart';
+import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 class ColleagueOrderScreen extends StatelessWidget {
   MenuBloc _menuBloc;
@@ -151,7 +152,6 @@ class ColleagueOrderScreen extends StatelessWidget {
 
   Widget personDropDown() {
     _colleagueOrderBloc.showUserList();
-
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(left: 8.0, right: 8.0),
@@ -172,27 +172,39 @@ class ColleagueOrderScreen extends StatelessWidget {
                       stream: _colleagueOrderBloc.userDropdownValue,
                       builder: (context, innerSnapshot) {
                         List<User> userList = outerSnapshot.data.users.toList();
+                        if (userList.length > 0 && userList[0].uname != "Select") {
+                          userList.insert(
+                              0,
+                              User(
+                                  uname: "Select",
+                                  gid: null,
+                                  messageType: "0"));
+                        }
                         return DropdownButtonHideUnderline(
                           child: ButtonTheme(
                             alignedDropdown: true,
                             child: Center(
                               child: DropdownButton<User>(
+                                hint: Text("Select"),
+                                value: innerSnapshot.hasData
+                                    ? innerSnapshot.data
+                                    : userList[0],
                                 items: userList.map((User item) {
                                   return DropdownMenuItem<User>(
                                     child: Text(item.uname),
                                     value: item,
                                   );
                                 }).toList(),
+                                //selected value of the list
+                                style: Theme.of(context).textTheme.title,
+                                isExpanded: true,
                                 onChanged: (value) {
+                                  if (value.gid == null) {
+                                    return;
+                                  }
                                   _colleagueOrderBloc
                                       .changeUserDropdownValue(value);
                                 },
-                                //selected value of the list
-                                value: innerSnapshot.hasData
-                                    ? innerSnapshot.data
-                                    : userList[0],
-                                style: Theme.of(context).textTheme.title,
-                                isExpanded: true,
                               ),
                             ),
                           ),

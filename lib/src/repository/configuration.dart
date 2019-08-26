@@ -7,6 +7,8 @@ class NetworkConfiguration {
   static const String ORDER_URL = "/snacks/ordersnacks.asp";
   static const String USER_LIST_URL = "/snacks/getuserlist.asp";
   static const String VIEW_TODAY_ORDER_URL = "/snacks/viewtodayorder.asp";
+  static const String ORDER_DETAILS_URL = "/snacks/viewsnacks.asp";
+  static const String DELETE_ORDER_URL = "/snacks/deleteorder.asp";
 
   //--------------------------------------------------------------------------//
 

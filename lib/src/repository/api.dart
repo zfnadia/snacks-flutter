@@ -3,6 +3,8 @@ import 'package:snacks_app/src/repository/modelClasses/loginModel.dart';
 import 'package:dio/dio.dart';
 import 'configuration.dart';
 import 'modelClasses/menuModel.dart';
+import 'modelClasses/orderDeleteModel.dart';
+import 'modelClasses/orderDetailModel.dart';
 import 'modelClasses/orderModel.dart';
 import 'modelClasses/userListModel.dart';
 
@@ -58,8 +60,6 @@ class ApiProvider {
             HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
           }),
     );
-    print(
-        "UserID $userId Name $userName Menu $order OtherId $clgOrder MESSAGE TYPE $response");
     return OrderModel.fromJson(response.data);
   }
 
@@ -71,6 +71,20 @@ class ApiProvider {
         });
     OrderModel orderModel = OrderModel.fromJson(response.data);
     return orderModel;
+  }
+
+  Future<OrderDetailsModel> getOrderDetails() async {
+    var response = await _dio.request(NetworkConfiguration.ORDER_DETAILS_URL,
+        options: Options(method: "GET"));
+    return OrderDetailsModel.fromJson(response.data);
+  }
+
+  void deleteOrder(String userId) async {
+    await _dio.request(NetworkConfiguration.DELETE_ORDER_URL,
+        options: Options(method: "GET"),
+        queryParameters: {
+          "userid": userId,
+        });
   }
 }
 

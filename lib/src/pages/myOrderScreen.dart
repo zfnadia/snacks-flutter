@@ -39,8 +39,8 @@ class MyOrder extends StatelessWidget {
                   width: 250,
                   child: RaisedButton(
                       onPressed: snapshot.hasData
-                          ? () {
-                              var presentOrderMsgType =
+                          ? () async {
+                              var presentOrderMsgType = await
                                   _myOrderBloc.viewPresentOrder();
                               if (presentOrderMsgType.toString() == "0") {
                                 _myOrderBloc.sendOrder();

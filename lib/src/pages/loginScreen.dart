@@ -33,36 +33,17 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        height: 128.0,
-                        width: 128.0,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: this.foregroundColor,
-                          radius: 100.0,
-                          child: Text(
-                            "N",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.w100,
-                            ),
+                        height: 120.0,
+                        width: 120.0,
+                        decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                          image: DecorationImage(
+                            image: new AssetImage('assets/bdjobs_logo_img.png'),
+                            fit: BoxFit.fill,
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: this.foregroundColor,
-                            width: 1.0,
-                          ),
-                          shape: BoxShape.circle,
-                          //image: DecorationImage(image: this.logo)
+                          shape: BoxShape.rectangle,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          "Nadia Ferdoush",
-                          style: TextStyle(color: this.foregroundColor),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -70,55 +51,6 @@ class LoginScreen extends StatelessWidget {
               _emailAddressField(),
               _passwordFiled(),
               _loginButton(),
-              Container(
-                width: double.infinity,
-                margin:
-                    const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-                alignment: Alignment.center,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: FlatButton(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 20.0),
-                        color: Colors.transparent,
-                        onPressed: () => {},
-                        child: Text(
-                          "Forgot your password?",
-                          style: TextStyle(
-                              color: this.foregroundColor.withOpacity(0.5)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Divider(),
-              ),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(
-                    left: 40.0, right: 40.0, top: 10.0, bottom: 20.0),
-                alignment: Alignment.center,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: FlatButton(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 20.0),
-                        color: Colors.transparent,
-                        onPressed: () => {},
-                        child: Text(
-                          "Don't have an account? Create One",
-                          style: TextStyle(
-                              color: this.foregroundColor.withOpacity(0.5)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
@@ -145,7 +77,7 @@ class LoginScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 00.0),
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 10.0),
             child: Icon(
               Icons.alternate_email,
               color: this.foregroundColor,
@@ -157,12 +89,12 @@ class LoginScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   return TextField(
                     style: new TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     cursorColor: this.foregroundColor,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'dummy@live.com',
-                      hintStyle: TextStyle(color: this.foregroundColor),
+                      hintText: 'Email',
+                      hintStyle: TextStyle(color: Colors.white70),
                     ),
                     onChanged: (value) {
                       _loginBloc.sinkEmail(value);
@@ -194,7 +126,7 @@ class LoginScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 00.0),
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 10.0),
             child: Icon(
               Icons.lock_open,
               color: this.foregroundColor,
@@ -208,12 +140,12 @@ class LoginScreen extends StatelessWidget {
                   return TextField(
                     style: new TextStyle(color: Colors.white),
                     obscureText: true,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     cursorColor: this.foregroundColor,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '*********',
-                      hintStyle: TextStyle(color: this.foregroundColor),
+                      hintText: 'Password',
+                      hintStyle: TextStyle(color: Colors.white70),
                     ),
                     onChanged: (value) {
                       _loginBloc.sinkPassword(value);

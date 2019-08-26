@@ -7,7 +7,6 @@ import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 class ColleagueOrderBloc extends BlocBase with Validators {
-  List<User> mUserList = List<User>();
   final _userList = BehaviorSubject<UserListModel>();
   final _userDropdownValue = BehaviorSubject<User>();
   final _radioBtnOrderValue = BehaviorSubject<String>();

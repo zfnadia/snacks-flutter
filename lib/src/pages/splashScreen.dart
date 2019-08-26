@@ -28,7 +28,7 @@ class SplashScreen extends StatelessWidget {
           decoration: new BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(6.0)),
             image: DecorationImage(
-              image: new AssetImage('assets/svgs/demo_logo.jpg'),
+              image: new AssetImage('assets/bdjobs_logo_img.png'),
               fit: BoxFit.fill,
             ),
             shape: BoxShape.rectangle,
