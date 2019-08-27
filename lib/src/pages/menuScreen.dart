@@ -36,7 +36,7 @@ class MenuScreen extends StatelessWidget {
         child: StreamBuilder(
           stream: _loginBloc.connectionStatus,
           builder: (context, connectionStatusSnapshot) {
-            return connectionStatusSnapshot.data == true ? Center(
+            return Center(
               child: Column(
                 children: <Widget>[
                   SizedBox(
@@ -95,13 +95,17 @@ class MenuScreen extends StatelessWidget {
                               return menuItem(snapshot, chips);
                             },
                           ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          internetStatus(connectionStatusSnapshot),
                         ],
                       ),
                     ),
                   )
                 ],
               ),
-            ): Text('No internet connection!', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,);
+            );
           }
         ),
       ),
@@ -154,5 +158,13 @@ class MenuScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static Widget internetStatus(snapshot) {
+    if (snapshot.data == null) {
+      return Text('');
+    } else if (snapshot.data == false) {
+      return Text("No Internet Connection!");
+    } return Text('');
   }
 }

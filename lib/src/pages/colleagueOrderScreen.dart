@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:snacks_app/src/blocs/colleagueOrderBloc.dart';
+import 'package:snacks_app/src/blocs/loginBloc.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
+import 'package:snacks_app/src/pages/menuScreen.dart';
 import 'package:snacks_app/src/repository/modelClasses/userListModel.dart';
 import 'package:snacks_app/src/pages/myOrderScreen.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
@@ -9,101 +11,114 @@ import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 class ColleagueOrderScreen extends StatelessWidget {
   MenuBloc _menuBloc;
   ColleagueOrderBloc _colleagueOrderBloc;
+  LoginBloc _loginBloc;
 
   @override
   Widget build(BuildContext context) {
     _colleagueOrderBloc = BlocProvider.of(context);
     _menuBloc = BlocProvider.of(context);
+    _loginBloc = BlocProvider.of(context);
+    _loginBloc.sinkConnectionStatus(false);
+    _loginBloc.checkConnectionStatus();
     _menuBloc.showMenu();
     return Scaffold(
         body: Container(
       padding: EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 20.0,
-          ),
-          Row(
+      child: StreamBuilder(
+        stream: _loginBloc.connectionStatus,
+        builder: (context, connectionStatusSnapshot) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Colleague's Name:",
-                  style: TextStyle(fontSize: 19.0, color: Colors.grey),
-                ),
+              SizedBox(
+                height: 20.0,
               ),
-              personDropDown(),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Colleague's Name:",
+                      style: TextStyle(fontSize: 19.0, color: Colors.grey),
+                    ),
+                  ),
+                  personDropDown(),
+                ],
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                'Select Menu',
+                style: TextStyle(fontSize: 30),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              radioButtons(),
+              SizedBox(
+                height: 20.0,
+              ),
+              StreamBuilder(
+                  stream: _colleagueOrderBloc.radioBtnOrderValue,
+                  builder: (context, snapshot) {
+                    return Container(
+                      width: 250,
+                      child: RaisedButton(
+                          onPressed: snapshot.hasData
+                              ? () async {
+                                  var presentOrderMsgType;
+                                  presentOrderMsgType =
+                                      await _colleagueOrderBloc.viewPresentOrder();
+                                  if (presentOrderMsgType.toString() == "0") {
+                                    _colleagueOrderBloc.sendColleagueOrder();
+                                    showDialog<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MyOrder.showAlertDialog(
+                                            context,
+                                            'Order Submitted',
+                                            'Your order has been submitted successfully!');
+                                      },
+                                    );
+                                  } else {
+                                    showDialog<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MyOrder.showAlertDialog(
+                                            context,
+                                            'Please Note',
+                                            'You have already placed the order for today!');
+                                      },
+                                    );
+                                  }
+                                }
+                              : null,
+                          textColor: Colors.white,
+                          color: Colors.deepPurpleAccent,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 40),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.donut_large),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Submit Order",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          )),
+                    );
+                  }),
+              SizedBox(
+                height: 10.0,
+              ),
+              MenuScreen.internetStatus(connectionStatusSnapshot),
             ],
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Text(
-            'Select Menu',
-            style: TextStyle(fontSize: 30),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          radioButtons(),
-          SizedBox(
-            height: 20.0,
-          ),
-          StreamBuilder(
-              stream: _colleagueOrderBloc.radioBtnOrderValue,
-              builder: (context, snapshot) {
-                return Container(
-                  width: 250,
-                  child: RaisedButton(
-                      onPressed: snapshot.hasData
-                          ? () async {
-                              var presentOrderMsgType;
-                              presentOrderMsgType =
-                                  await _colleagueOrderBloc.viewPresentOrder();
-                              if (presentOrderMsgType.toString() == "0") {
-                                _colleagueOrderBloc.sendColleagueOrder();
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return MyOrder.showAlertDialog(
-                                        context,
-                                        'Order Submitted',
-                                        'Your order has been submitted successfully!');
-                                  },
-                                );
-                              } else {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return MyOrder.showAlertDialog(
-                                        context,
-                                        'Please Note',
-                                        'You have already placed the order for today!');
-                                  },
-                                );
-                              }
-                            }
-                          : null,
-                      textColor: Colors.white,
-                      color: Colors.deepPurpleAccent,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 40),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.donut_large),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Submit Order",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      )),
-                );
-              }),
-        ],
+          );
+        }
       ),
     ));
   }
