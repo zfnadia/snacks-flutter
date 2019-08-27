@@ -82,7 +82,7 @@ class OrderDetailsState extends State<OrderDetailsScreen> {
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
-                        _showSnackBar(context, 'Deleted');
+//                        _showSnackBar(context, 'Deleted');
                         _orderDetailsBloc.deleteOrder(orderList[index]);
                         orderList.removeAt(index);
                         setState(() {});
@@ -98,7 +98,7 @@ class OrderDetailsState extends State<OrderDetailsScreen> {
         });
   }
 
-  void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
+//  void _showSnackBar(BuildContext context, String text) {
+//    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+//  }
 }

@@ -6,7 +6,6 @@ import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/myOrderBloc.dart';
 import 'package:snacks_app/src/blocs/orderDetailsBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
-import 'package:snacks_app/src/repository/modelClasses/orderDetailModel.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 import 'colleagueOrderScreen.dart';
@@ -23,6 +22,8 @@ class HomeScreenState extends State<HomeScreen> {
   int _currentPage = 0;
   BottomNavigationBloc _bottomNavigationBloc;
   BuildContext _context;
+  var userId;
+  var userName;
 
   final List<Widget> _widgetOptions = [
     MenuScreen(),
@@ -36,6 +37,27 @@ class HomeScreenState extends State<HomeScreen> {
     "My Order",
     "Order for a Colleague!",
     "Order Details",
+  ];
+
+  final List<String> _admins = [
+    'DxDE0lxvVbdFMjfGfoGTxlb0srh2',
+    '56mbpmXT0aOsn5JaY3XD7i5NSY62',
+    '9TnM3lod6VgWqAxINxO8ZMrVXy82',
+    'rr1e1IZbzzguQ1TwnncCU0h9ETX2',
+    'rr1e1IZbzzguQ1TwnncCU0h9ETX3',
+  ];
+
+  final List<TabData> _tabsAdmin = [
+    TabData(iconData: Icons.fastfood, title: "Menu"),
+    TabData(iconData: Icons.favorite, title: "My Order"),
+    TabData(iconData: Icons.supervisor_account, title: "Colleague's Order"),
+    TabData(iconData: Icons.dashboard, title: "Order Summary"),
+  ];
+
+  final List<TabData> _tabsGeneral = [
+    TabData(iconData: Icons.fastfood, title: "Menu"),
+    TabData(iconData: Icons.favorite, title: "My Order"),
+    TabData(iconData: Icons.supervisor_account, title: "Colleague's Order"),
   ];
 
   @override
@@ -53,6 +75,12 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _context = context;
     _bottomNavigationBloc.getOrderList();
+    sessionManager.userName.then((onValue) {
+      userName = onValue;
+    });
+    sessionManager.userID.then((onValue) {
+      userId = onValue;
+    });
     // TODO: implement build
     return BlocProvider(
       bloc: MenuBloc(),
@@ -90,14 +118,16 @@ class HomeScreenState extends State<HomeScreen> {
                               appBar: AppBar(
                                 backgroundColor: Colors.deepPurple,
                                 title: Text(
-                                  _pageNames[_currentPage],
+                                  _currentPage == 0
+                                      ? '${_pageNames[_currentPage]} $userName!'
+                                      : '${_pageNames[_currentPage]}',
                                 ),
                                 actions: <Widget>[
                                   appbarFlagSnapshot.data == null
                                       ? orderSummary(false)
                                       : orderSummary(
-                                    appbarFlagSnapshot.data,
-                                  ),
+                                          appbarFlagSnapshot.data,
+                                        ),
                                   IconButton(
                                       icon: Icon(
                                         Icons.exit_to_app,
@@ -142,20 +172,9 @@ class HomeScreenState extends State<HomeScreen> {
                                 circleColor: Colors.deepPurple,
                                 activeIconColor: Colors.white,
                                 inactiveIconColor: Colors.deepPurple,
-                                tabs: [
-                                  TabData(
-                                      iconData: Icons.fastfood, title: "Menu"),
-                                  TabData(
-                                      iconData: Icons.favorite,
-                                      title: "My Order"),
-                                  TabData(
-                                      iconData: Icons.supervisor_account,
-                                      title: "Colleague's Order"),
-                                  TabData(
-                                      iconData: Icons.dashboard,
-                                      title: "Order Details"),
-//                    TabData(iconData: Icons.details, title: "Order Summary"),
-                                ],
+                                tabs: _admins.contains(userId.toString())
+                                    ? _tabsAdmin
+                                    : _tabsGeneral,
                                 onTabChangedListener: (position) {
                                   setState(() {
                                     if (position == 3) {
@@ -202,7 +221,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Visibility(
       child: IconButton(
           icon: Icon(
-            Icons.details,
+            Icons.pie_chart,
             color: Colors.white,
           ),
           onPressed: () {
@@ -235,7 +254,7 @@ class HomeScreenState extends State<HomeScreen> {
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             String key =
-                                            orders.keys.elementAt(index);
+                                                orders.keys.elementAt(index);
                                             return Column(
                                               children: <Widget>[
                                                 new ListTile(
