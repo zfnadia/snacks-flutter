@@ -14,79 +14,79 @@ class MyOrder extends StatelessWidget {
     _menuBloc.showMenu();
     return Scaffold(
         body: Container(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 20.0,
-          ),
-          Text(
-            'Select Menu',
-            style: TextStyle(fontSize: 30),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          radioButtons(),
-          SizedBox(
-            height: 20.0,
-          ),
-          StreamBuilder(
-              stream: _myOrderBloc.radioBtnOrderValue,
-              builder: (context, snapshot) {
-                return Container(
-                  width: 250,
-                  child: RaisedButton(
-                      onPressed: snapshot.hasData
-                          ? () async {
-                              var presentOrderMsgType = await
-                                  _myOrderBloc.viewPresentOrder();
-                              if (presentOrderMsgType.toString() == "0") {
-                                _myOrderBloc.sendOrder();
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return showAlertDialog(
-                                        context,
-                                        'Order Submitted',
-                                        'Your order has been submitted successfully!');
-                                  },
-                                );
-                              } else {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return showAlertDialog(
-                                        context,
-                                        'Please Note',
-                                        'You have already placed the order for today!');
-                                  },
-                                );
-                              }
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                'Select Menu',
+                style: TextStyle(fontSize: 30),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              radioButtons(),
+              SizedBox(
+                height: 20.0,
+              ),
+              StreamBuilder(
+                  stream: _myOrderBloc.radioBtnOrderValue,
+                  builder: (context, snapshot) {
+                    return Container(
+                      width: 250,
+                      child: RaisedButton(
+                          onPressed: snapshot.hasData
+                              ? () async {
+                            var presentOrderMsgType = await
+                            _myOrderBloc.viewPresentOrder();
+                            if (presentOrderMsgType.toString() == "0") {
+                              _myOrderBloc.sendOrder();
+                              showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return showAlertDialog(
+                                      context,
+                                      'Order Submitted',
+                                      'Your order has been submitted successfully!');
+                                },
+                              );
+                            } else {
+                              showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return showAlertDialog(
+                                      context,
+                                      'Please Note',
+                                      'You have already placed the order for today!');
+                                },
+                              );
                             }
-                          : null,
-                      textColor: Colors.white,
-                      color: Colors.deepPurpleAccent,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 40),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.donut_large),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Submit Order",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      )),
-                );
-              }),
-        ],
-      ),
-    ));
+                          }
+                              : null,
+                          textColor: Colors.white,
+                          color: Colors.deepPurpleAccent,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 40),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.donut_large),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Submit Order",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          )),
+                    );
+                  }),
+            ],
+          ),
+        ));
   }
 
   Widget radioButtons() {
@@ -94,7 +94,7 @@ class MyOrder extends StatelessWidget {
         stream: _myOrderBloc.radioBtnOrderValue,
         builder: (context, snapshot) {
           var _radioValue =
-              snapshot.hasData && snapshot.data is String ? snapshot.data : "";
+          snapshot.hasData && snapshot.data is String ? snapshot.data : "";
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[

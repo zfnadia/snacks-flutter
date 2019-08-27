@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snacks_app/src/blocs/loginBloc.dart';
 import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
 
@@ -12,10 +13,14 @@ final double circleBorderWidth = 5.0;
 class MenuScreen extends StatelessWidget {
   BuildContext context;
   MenuBloc _menuBloc;
+  LoginBloc _loginBloc;
 
   @override
   Widget build(BuildContext context) {
     _menuBloc = BlocProvider.of(context);
+    _loginBloc = BlocProvider.of(context);
+    _loginBloc.sinkConnectionStatus(false);
+    _loginBloc.checkConnectionStatus();
     _menuBloc.showMenu();
 
     return Scaffold(
@@ -28,71 +33,76 @@ class MenuScreen extends StatelessWidget {
 //                  "",
 //                ),
 //                fit: BoxFit.fill)),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Today's Menu",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              StreamBuilder(
-                stream: _menuBloc.mainMenu,
-                builder: (context, snapshot) {
-                  return menuItem(snapshot, foodImage);
-                },
-              ),
-//              mainMenuItem(),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Alternate Menu",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                child: Container(
-//                  color: Colors.deepOrange,
-                  child: Column(
-                    children: <Widget>[
-                      StreamBuilder(
-                        stream: _menuBloc.altMenuOne,
-                        builder: (context, snapshot) {
-                          return menuItem(snapshot, cookies);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      StreamBuilder(
-                        stream: _menuBloc.altMenuTwo,
-                        builder: (context, snapshot) {
-                          return menuItem(snapshot, charm);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      StreamBuilder(
-                        stream: _menuBloc.altMenuThree,
-                        builder: (context, snapshot) {
-                          return menuItem(snapshot, chips);
-                        },
-                      ),
-                    ],
+        child: StreamBuilder(
+          stream: _loginBloc.connectionStatus,
+          builder: (context, connectionStatusSnapshot) {
+            return connectionStatusSnapshot.data == true ? Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-              )
-            ],
-          ),
+                  Text(
+                    "Today's Menu",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  StreamBuilder(
+                    stream: _menuBloc.mainMenu,
+                    builder: (context, snapshot) {
+                      return menuItem(snapshot, foodImage);
+                    },
+                  ),
+//              mainMenuItem(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Alternate Menu",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: Container(
+//                  color: Colors.deepOrange,
+                      child: Column(
+                        children: <Widget>[
+                          StreamBuilder(
+                            stream: _menuBloc.altMenuOne,
+                            builder: (context, snapshot) {
+                              return menuItem(snapshot, cookies);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          StreamBuilder(
+                            stream: _menuBloc.altMenuTwo,
+                            builder: (context, snapshot) {
+                              return menuItem(snapshot, charm);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          StreamBuilder(
+                            stream: _menuBloc.altMenuThree,
+                            builder: (context, snapshot) {
+                              return menuItem(snapshot, chips);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ): Text('No internet connection!', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,);
+          }
         ),
       ),
     );

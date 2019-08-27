@@ -12,7 +12,6 @@ class OrderDetailsBloc extends BlocBase {
 
   void getOrderList() async {
     OrderDetailsModel orderDetailsModel = await api.getOrderDetails();
-    print("LLLLLLLLLLLLLLL $orderDetailsModel");
     sinkOrderList(orderDetailsModel);
   }
 

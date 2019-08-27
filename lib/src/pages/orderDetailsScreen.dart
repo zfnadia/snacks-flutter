@@ -65,13 +65,13 @@ class OrderDetailsState extends State<OrderDetailsScreen> {
                           ),
                           Expanded(
                               child: Column(children: <Widget>[
-                            Text(
-                                snapshot.hasData && snapshot.data.orders[index].menu is String
-                                    ? menuItem
-                                    : "",
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.black87))
-                          ])),
+                                Text(
+                                    snapshot.hasData && snapshot.data.orders[index].menu is String
+                                        ? menuItem
+                                        : "",
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.black87))
+                              ])),
                         ],
                       ),
                     ),

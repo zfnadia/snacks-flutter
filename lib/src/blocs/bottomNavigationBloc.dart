@@ -42,9 +42,11 @@ class BottomNavigationBloc extends BlocBase {
 
   void setOrderHashMap(orderListSnapShot) {
     if (orderListSnapShot.hasData &&
-        orderListSnapShot.data is OrderDetailsModel) {
-      List<Order> orderList = orderListSnapShot.data.orders.toList();
+        orderListSnapShot.data is OrderDetailsModel &&
+        orderListSnapShot.data != null) {
+      var totalOrderNum;
       var orders = <String, int>{};
+      List<Order> orderList = orderListSnapShot.data.orders.toList();
       var currentKey;
       for (int index = 0; index < orderList.length; index++) {
         currentKey = orderList[index].menu;
@@ -55,14 +57,10 @@ class BottomNavigationBloc extends BlocBase {
         }
       }
       var values = orders.values;
-      var totalOrderNum = values.reduce((sum, element) => sum + element);
+      totalOrderNum = values.reduce((sum, element) => sum + element);
       sinkTotalOrder(totalOrderNum);
       sinkOrderHashMap(orders);
     }
-  }
-
-  void deleteOrder(Order order) async {
-    api.deleteOrder(order.userid);
   }
 
   @override
