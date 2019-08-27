@@ -51,6 +51,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     _bottomNavigationBloc.getOrderList();
     // TODO: implement build
     return BlocProvider(
