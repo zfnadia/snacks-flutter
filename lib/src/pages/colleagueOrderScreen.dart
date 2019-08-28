@@ -22,104 +22,96 @@ class ColleagueOrderScreen extends StatelessWidget {
     _loginBloc.checkConnectionStatus();
     _menuBloc.showMenu();
     return Scaffold(
-        body: Container(
-      padding: EdgeInsets.all(8.0),
-      child: StreamBuilder(
-        stream: _loginBloc.connectionStatus,
-        builder: (context, connectionStatusSnapshot) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 20.0,
+        body: ListView(
+      padding: EdgeInsets.all(16.0),
+      children: <Widget>[
+        SizedBox(
+          height: 20.0,
+        ),
+        Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Colleague's Name:",
+                style: TextStyle(fontSize: 19.0, color: Colors.grey),
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Colleague's Name:",
-                      style: TextStyle(fontSize: 19.0, color: Colors.grey),
-                    ),
-                  ),
-                  personDropDown(),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Select Menu',
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              radioButtons(),
-              SizedBox(
-                height: 20.0,
-              ),
-              StreamBuilder(
-                  stream: _colleagueOrderBloc.radioBtnOrderValue,
-                  builder: (context, snapshot) {
-                    return Container(
-                      width: 250,
-                      child: RaisedButton(
-                          onPressed: snapshot.hasData
-                              ? () async {
-                                  var presentOrderMsgType;
-                                  presentOrderMsgType =
-                                      await _colleagueOrderBloc.viewPresentOrder();
-                                  if (presentOrderMsgType.toString() == "0") {
-                                    _colleagueOrderBloc.sendColleagueOrder();
-                                    showDialog<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return MyOrder.showAlertDialog(
-                                            context,
-                                            'Order Submitted',
-                                            'Your order has been submitted successfully!');
-                                      },
-                                    );
-                                  } else {
-                                    showDialog<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return MyOrder.showAlertDialog(
-                                            context,
-                                            'Please Note',
-                                            'You have already placed the order for today!');
-                                      },
-                                    );
-                                  }
-                                }
-                              : null,
-                          textColor: Colors.white,
-                          color: Colors.deepPurpleAccent,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 40),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.donut_large),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Submit Order",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ],
-                          )),
-                    );
-                  }),
-              SizedBox(
-                height: 10.0,
-              ),
-              MenuScreen.internetStatus(connectionStatusSnapshot),
-            ],
-          );
-        }
-      ),
+            ),
+            personDropDown(),
+          ],
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'Select Menu',
+          style: TextStyle(fontSize: 25.0),
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        radioButtons(),
+        SizedBox(
+          height: 20.0,
+        ),
+        StreamBuilder(
+            stream: _colleagueOrderBloc.radioBtnOrderValue,
+            builder: (context, snapshot) {
+              return Container(
+                width: 250,
+                child: RaisedButton(
+                    onPressed: snapshot.hasData
+                        ? () async {
+                            var presentOrderMsgType;
+                            presentOrderMsgType =
+                                await _colleagueOrderBloc.viewPresentOrder();
+                            if (presentOrderMsgType.toString() == "0") {
+                              _colleagueOrderBloc.sendColleagueOrder();
+                              showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyOrder.showAlertDialog(
+                                      context,
+                                      'Order Submitted',
+                                      'Your order has been submitted successfully!');
+                                },
+                              );
+                            } else {
+                              showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyOrder.showAlertDialog(
+                                      context,
+                                      'Please Note',
+                                      'You have already placed the order for today!');
+                                },
+                              );
+                            }
+                          }
+                        : null,
+                    textColor: Colors.white,
+                    color: Colors.deepPurpleAccent,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.donut_large),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Submit Order",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    )),
+              );
+            }),
+        SizedBox(
+          height: 100.0,
+        ),
+      ],
     ));
   }
 
@@ -187,7 +179,8 @@ class ColleagueOrderScreen extends StatelessWidget {
                       stream: _colleagueOrderBloc.userDropdownValue,
                       builder: (context, innerSnapshot) {
                         List<User> userList = outerSnapshot.data.users.toList();
-                        if (userList.length > 0 && userList[0].uname != "Select") {
+                        if (userList.length > 0 &&
+                            userList[0].uname != "Select") {
                           userList.insert(
                               0,
                               User(

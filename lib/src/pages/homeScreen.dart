@@ -6,6 +6,7 @@ import 'package:snacks_app/src/blocs/menuBloc.dart';
 import 'package:snacks_app/src/blocs/myOrderBloc.dart';
 import 'package:snacks_app/src/blocs/orderDetailsBloc.dart';
 import 'package:snacks_app/src/blocs/provider/blocProvider.dart';
+import 'package:snacks_app/src/repository/modelClasses/orderDetailModel.dart';
 import 'package:snacks_app/src/sessionManager/sessionManager.dart';
 
 import 'colleagueOrderScreen.dart';
@@ -24,6 +25,7 @@ class HomeScreenState extends State<HomeScreen> {
   BuildContext _context;
   var userId;
   var userName;
+  List<Order> orderList;
 
   final List<Widget> _widgetOptions = [
     MenuScreen(),
@@ -40,11 +42,12 @@ class HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<String> _admins = [
-    'DxDE0lxvVbdFMjfGfoGTxlb0srh2',
-    '56mbpmXT0aOsn5JaY3XD7i5NSY62',
-    '9TnM3lod6VgWqAxINxO8ZMrVXy82',
-    'rr1e1IZbzzguQ1TwnncCU0h9ETX2',
-    'rr1e1IZbzzguQ1TwnncCU0h9ETX3',
+    'PVujSMclxIRclv2vdFhx2CCbAPA3', //Nadia
+    'DxDE0lxvVbdFMjfGfoGTxlb0srh2', //Azhar
+    '56mbpmXT0aOsn5JaY3XD7i5NSY62', //Rubayet
+    '9TnM3lod6VgWqAxINxO8ZMrVXy82', //Rafique
+    'rr1e1IZbzzguQ1TwnncCU0h9ETX2', //Kamrul
+    'rr1e1IZbzzguQ1TwnncCU0h9ETX3', //Rejaul
   ];
 
   final List<TabData> _tabsAdmin = [
@@ -67,11 +70,6 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-//    bottomNavigationBloc.clearAllData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _context = context;
     _bottomNavigationBloc.getOrderList();
@@ -81,6 +79,12 @@ class HomeScreenState extends State<HomeScreen> {
     sessionManager.userID.then((onValue) {
       userId = onValue;
     });
+
+    var response = _bottomNavigationBloc.getOrderList();
+    response.then((onValue) {
+      orderList =  onValue.orders.toList();
+    });
+
     // TODO: implement build
     return BlocProvider(
       bloc: MenuBloc(),
@@ -231,55 +235,58 @@ class HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) {
                 return StreamBuilder(
                     stream: _bottomNavigationBloc.orderHashMap,
-                    builder: (context, snapshot) {
-                      var orders = snapshot.data;
+                    builder: (context, orderHashMapSnapshot) {
+                      var orders = orderHashMapSnapshot.data;
                       return AlertDialog(
                         title: Text(
                           'ORDER SUMMARY',
                           textAlign: TextAlign.center,
                         ),
-                        content: StreamBuilder(
-                            stream: _bottomNavigationBloc.totalOrder,
-                            builder: (context, snapshot) {
-                              return Container(
-                                height: 300.0,
-                                width: 300.0,
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                        height: 250.0,
-                                        width: 250.0,
-                                        child: ListView.builder(
-                                          itemCount: orders.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            String key =
-                                                orders.keys.elementAt(index);
-                                            return Column(
-                                              children: <Widget>[
-                                                new ListTile(
-                                                  title: new Text(
-                                                    "$key: ${orders[key]}",
-                                                    style: TextStyle(
-                                                        fontSize: 18.0),
-                                                  ),
-                                                ),
-                                                new Divider(
-                                                  height: 2.0,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        )),
-                                    Expanded(
-                                      child: Text(
-                                          'Total Order: ${snapshot.data}',
-                                          style: TextStyle(fontSize: 18.0)),
+                        content: orderList[0].messageType != '0'
+                            ? StreamBuilder(
+                                stream: _bottomNavigationBloc.totalOrder,
+                                builder: (context, snapshot) {
+                                  return Container(
+                                    height: 300.0,
+                                    width: 300.0,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 250.0,
+                                            width: 250.0,
+                                            child: ListView.builder(
+                                              itemCount: orders.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                String key = orders.keys
+                                                    .elementAt(index);
+                                                return Column(
+                                                  children: <Widget>[
+                                                    new ListTile(
+                                                      title: new Text(
+                                                        "$key: ${orders[key]}",
+                                                        style: TextStyle(
+                                                            fontSize: 18.0),
+                                                      ),
+                                                    ),
+                                                    new Divider(
+                                                      height: 2.0,
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            )),
+                                        Expanded(
+                                          child: Text(
+                                              'Total Order: ${snapshot.data}',
+                                              style: TextStyle(fontSize: 18.0)),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            }),
+                                  );
+                                })
+                            : Text('No order found.'),
                         actions: <Widget>[
                           FlatButton(
                             child: Text('OK'),

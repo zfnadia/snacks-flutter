@@ -22,37 +22,34 @@ class LoginScreen extends StatelessWidget {
       )),
       //main body starts here
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 150.0, bottom: 50.0),
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        height: 120.0,
-                        width: 120.0,
-                        decoration: new BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                          image: DecorationImage(
-                            image: new AssetImage('assets/bdjobs_logo_img.png'),
-                            fit: BoxFit.fill,
-                          ),
-                          shape: BoxShape.rectangle,
+        body: ListView(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(top: 150.0, bottom: 50.0),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 120.0,
+                      width: 120.0,
+                      decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                        image: DecorationImage(
+                          image: new AssetImage('assets/bdjobs_logo_img.png'),
+                          fit: BoxFit.fill,
                         ),
+                        shape: BoxShape.rectangle,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              _emailAddressField(),
-              _passwordFiled(),
-              _loginButton(),
-            ],
-          ),
+            ),
+            _emailAddressField(),
+            _passwordFiled(),
+            _loginButton(),
+          ],
         ),
       ),
     );

@@ -24,92 +24,67 @@ class MenuScreen extends StatelessWidget {
     _menuBloc.showMenu();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.white70,
-        ),
-//            image: DecorationImage(
-//                image: AssetImage(
-//                  "",
-//                ),
-//                fit: BoxFit.fill)),
-        child: StreamBuilder(
-          stream: _loginBloc.connectionStatus,
-          builder: (context, connectionStatusSnapshot) {
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Today's Menu",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  StreamBuilder(
-                    stream: _menuBloc.mainMenu,
-                    builder: (context, snapshot) {
-                      return menuItem(snapshot, foodImage);
-                    },
-                  ),
-//              mainMenuItem(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Alternate Menu",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(
-                    child: Container(
-//                  color: Colors.deepOrange,
-                      child: Column(
-                        children: <Widget>[
-                          StreamBuilder(
-                            stream: _menuBloc.altMenuOne,
-                            builder: (context, snapshot) {
-                              return menuItem(snapshot, cookies);
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          StreamBuilder(
-                            stream: _menuBloc.altMenuTwo,
-                            builder: (context, snapshot) {
-                              return menuItem(snapshot, charm);
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          StreamBuilder(
-                            stream: _menuBloc.altMenuThree,
-                            builder: (context, snapshot) {
-                              return menuItem(snapshot, chips);
-                            },
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          internetStatus(connectionStatusSnapshot),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
-        ),
-      ),
-    );
+        body: ListView(
+      scrollDirection: Axis.vertical,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Today's Menu",
+              style: TextStyle(fontSize: 25.0),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            StreamBuilder(
+              stream: _menuBloc.mainMenu,
+              builder: (context, snapshot) {
+                return menuItem(snapshot, foodImage);
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text("Alternate Menu",
+                style: TextStyle(fontSize: 25.0), textAlign: TextAlign.center),
+            SizedBox(
+              height: 20,
+            ),
+            StreamBuilder(
+              stream: _menuBloc.altMenuOne,
+              builder: (context, snapshot) {
+                return menuItem(snapshot, cookies);
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            StreamBuilder(
+              stream: _menuBloc.altMenuTwo,
+              builder: (context, snapshot) {
+                return menuItem(snapshot, charm);
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            StreamBuilder(
+              stream: _menuBloc.altMenuThree,
+              builder: (context, snapshot) {
+                return menuItem(snapshot, chips);
+              },
+            ),
+            SizedBox(
+              height: 100,
+            ),
+          ],
+        )
+      ],
+    ));
   }
 
   Widget menuItem(snapshot, foodImage) {
@@ -159,12 +134,13 @@ class MenuScreen extends StatelessWidget {
       ),
     );
   }
-
-  static Widget internetStatus(snapshot) {
-    if (snapshot.data == null) {
-      return Text('');
-    } else if (snapshot.data == false) {
-      return Text("No Internet Connection!");
-    } return Text('');
-  }
+//
+//  static Widget internetStatus(snapshot) {
+//    if (snapshot.data == null) {
+//      return Text('');
+//    } else if (snapshot.data == false) {
+//      return Text("No Internet Connection!");
+//    }
+//    return Text('');
+//  }
 }

@@ -35,9 +35,10 @@ class BottomNavigationBloc extends BlocBase {
 
   Function(int) get sinkTotalOrder => _totalOrder.sink.add;
 
-  void getOrderList() async {
+  Future<OrderDetailsModel> getOrderList() async {
     OrderDetailsModel orderDetailsModel = await api.getOrderDetails();
     sinkOrderList(orderDetailsModel);
+    return orderDetailsModel;
   }
 
   void setOrderHashMap(orderListSnapShot) {

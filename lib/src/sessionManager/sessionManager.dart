@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:snacks_app/src/repository/api.dart';
 import 'package:snacks_app/src/repository/modelClasses/loginModel.dart';
 import 'package:snacks_app/src/routes/routes.dart';
 import 'preferencesHelper.dart';
